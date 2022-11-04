@@ -1,19 +1,11 @@
-FROM alpine:3.14
+FROM ubuntu:22.10
 
-RUN apk add --no-cache postgresql-client
+ARG DEBIAN_FRONTEND=noninteractive
+ARG PGCLI_PACKAGE_VERSION
 
-RUN apk add --no-cache \
-        python3 \
-        libevent \
-        libpq && \
-    apk add --no-cache --virtual .build-deps \
-        python3-dev \
-        postgresql-dev \
-        libevent-dev \
-        musl-dev \
-        gcc && \
-    python3 -m ensurepip && \
-    pip3 install pgcli && \
-    apk del .build-deps
+RUN apt-get update \
+ && apt-get install -y pgcli=$PGCLI_PACKAGE_VERSION postgresql-client \
+ && apt-get clean \
+ && rm /var/lib/apt/lists/* -fR
 
 ENTRYPOINT ["pgcli"]

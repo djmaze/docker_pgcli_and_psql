@@ -2,5 +2,8 @@ version: "3.7"
 
 services:
   app:
-    build: .
-    image: mazzolino/pgcli_and_psql
+    build:
+      context: .
+      args:
+        - PGCLI_PACKAGE_VERSION=3.4.1-1
+    image: mazzolino/pgcli_and_psql:3.4.1
